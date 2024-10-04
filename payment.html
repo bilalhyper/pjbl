@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Ganti dengan path ke file CSS Anda -->
+</head>
+<style>
+    /* Reset dan dasar */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Heading */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Form pembayaran */
+.payment-form {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.payment-form input[type="text"],
+.payment-form input[type="email"],
+.payment-form input[type="number"],
+.payment-form select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+/* Tombol */
+.payment-form button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
+
+.payment-form button:hover {
+    background-color: #218838;
+}
+
+/* Daftar produk */
+.product-summary {
+    margin-top: 20px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.product-summary h3 {
+    margin-top: 0;
+}
+
+.product-summary table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.product-summary th,
+.product-summary td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+}
+
+</style>
+<body>
+    <div class="container">
+        <h2>Payment</h2>
+        <div class="payment-form">
+            <form id="payment-form">
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email Address" required>
+                <input type="text" placeholder="Shipping Address" required>
+                <input type="number" placeholder="Phone Number" required>
+                <select required>
+                    <option value="">Select Payment Method</option>
+                    <option value="credit_card">Credit Card</option>
+                    <option value="bank_transfer">Bank Transfer</option>
+                </select>
+                <button type="submit">Complete Payment</button>
+            </form>
+        </div>
+
+        <div class="product-summary">
+            <h3>Order Summary</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Product Name</th>
+                        <th>Size</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="order-summary-body">
+                    <!-- Detail produk akan dimasukkan di sini -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+           // Mengambil data pengguna dari localStorage
+           const userData = JSON.parse(localStorage.getItem('userData'));
+
+// Mengisi form pembayaran dengan data pengguna
+if (userData) {
+    document.querySelector('input[placeholder="Full Name"]').value = userData.name;
+    document.querySelector('input[placeholder="Email Address"]').value = userData.email;
+    document.querySelector('input[placeholder="Shipping Address"]').value = userData.address;
+    document.querySelector('input[placeholder="Phone Number"]').value = userData.phone;
+}
+
+        // Mengambil produk dari localStorage dan menampilkannya di order summary
+        const selectedProduct = JSON.parse(localStorage.getItem('selectedProduct'));
+        const orderSummaryBody = document.getElementById('order-summary-body');
+
+        if (selectedProduct) {
+            const row = `
+                <tr>
+                    <td><img src="${selectedProduct.image}" alt="${selectedProduct.name}" width="100"></td>
+                    <td>${selectedProduct.name}</td>
+                    <td>${selectedProduct.size}</td>
+                    <td>${selectedProduct.quantity}</td>
+                    <td>Rp ${Number(selectedProduct.price).toLocaleString('id-ID')}</td>
+                    <td>Rp ${(Number(selectedProduct.price) * selectedProduct.quantity).toLocaleString('id-ID')}</td>
+                </tr>
+            `;
+            orderSummaryBody.innerHTML += row;
+        }
+
+         // Event listener untuk form pembayaran
+    document.getElementById("payment-form").addEventListener("submit", function(event) {
+        event.preventDefault(); // Mencegah pengiriman form default
+
+        // Logika pembayaran (ini hanya simulasi)
+        const paymentSuccess = true; // Ganti dengan logika pembayaran yang sebenarnya
+
+        if (paymentSuccess) {
+            // Redirect ke halaman order setelah pembayaran berhasil
+            window.location.href = "order.php";
+        } else {
+            alert("Payment failed. Please try again.");
+        }
+    });
+        
+    </script>
+</body>
+</html>
